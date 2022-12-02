@@ -1,6 +1,6 @@
 use ez_colorize::ColorizeDisplay;
 use random_word;
-use std::{io, process};
+use std::process;
 
 enum GuessCharStatus {
     Correct,
@@ -30,7 +30,7 @@ impl Guess {
     }
 }
 
-struct Game {
+pub struct Game {
     guesses: Vec<Guess>,
     word: String,
 }
@@ -116,18 +116,6 @@ impl Game {
                 self.print_status();
                 process::exit(0);
             }
-        }
-    }
-}
-
-pub fn play_game() {
-    let mut game = Game::new();
-
-    loop {
-        let mut guess = String::new();
-        match io::stdin().read_line(&mut guess) {
-            Ok(_) => game.guess_word(guess.trim().to_string()),
-            Err(_) => print!("Error reading input"),
         }
     }
 }
