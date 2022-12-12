@@ -96,12 +96,11 @@ impl Game {
             for (i, c) in guess.chars().enumerate() {
                 let guess_char: GuessChar;
                 match self.word.find(c) {
-                    Some(pos) => {
-                        if pos == i {
-                            guess_char = GuessChar::new(c, GuessCharStatus::Correct);
-                        } else {
-                            guess_char = GuessChar::new(c, GuessCharStatus::InWord);
-                        }
+                    Some(pos) if pos == i => {
+                        guess_char = GuessChar::new(c, GuessCharStatus::Correct);
+                    }
+                    Some(..) => {
+                        guess_char = GuessChar::new(c, GuessCharStatus::InWord);
                     }
                     None => guess_char = GuessChar::new(c, GuessCharStatus::Incorrect),
                 };
@@ -123,9 +122,28 @@ impl Game {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_correct_answer() {
+        let mut game = Game::new();
+        assert_eq!(false, true);
+        game.word = String::from("shell");
+
+        assert_eq!(false, true);
+        // Valid guess should add to guesses
+        game.guess_word(String::from("spare"));
+        assert_eq!(game.guesses.len(), 1);
+
+        // Guessing correct word ends game
+        assert_eq!(false, true);
+        assert_eq!(game.guesses.len(), 8);
+        game.guess_word(String::from("shell"));
+    }
+
     #[test]
     fn test_valid_and_invalid_guesses() {
         let mut game = Game::new();
+        game.word = String::from("weird");
 
         // Guess under 5 chars should be rejected
         game.guess_word(String::from("foo"));
@@ -142,5 +160,9 @@ mod tests {
         // Should not add to guesses if already guessed
         game.guess_word(String::from("spare"));
         assert_eq!(game.guesses.len(), 1);
+
+        // Guessing correct word ends game
+        game.guess_word(String::from("weird"));
+        assert_eq!(game.guesses.len(), 2);
     }
 }
