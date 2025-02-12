@@ -1,5 +1,5 @@
 use std::io;
-use wordle::Game;
+use wordli::Game;
 
 fn main() {
     let mut game = Game::new();
